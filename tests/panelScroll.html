@@ -36,24 +36,14 @@
 
   <script>
     //<![CDATA[
-
-    document.write(emptyPanel);
-
-    $(function(){
-      $('#panel').panel({
-        'controls' : {
-          'headerLeft' : '.panel-fav-link',
-          'headerRight' : '.panel-basket-link',
-          'bodyLeft' : '#favorites-block',
-          'bodyRight' : '#basket-block',
-          'hidePanelButton' : '.products-fixed-panel .close',
-          'carouselLeft' : $('#favorite-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
-          'carouselRight' :  $('#basket-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
-          'ajaxUpdateSelectors' : ['.share-basket-link-block']
-        }
-      });
-    });
-
+	document.write(emptyPanel);
+	$('#panel').panel({
+	'tabs' : {
+	  'header' : '.panel-fav-link',
+	  'body' : '#favorites-block',
+	  'carousel' : $('#favorite-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
+	}
+	});
     //]]>
   </script>
 

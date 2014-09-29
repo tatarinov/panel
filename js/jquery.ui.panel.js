@@ -5,21 +5,35 @@
  * @license http://argilla.ru/LICENSE
  */
 
+ /**
+  * controls [
+  *  {
+  *	   'header' : '#panel-header-left',
+  *	   'body' : '#panel-body-left',
+  *	   'footer' : '#panel-footer-left',
+  *	}
+  * ]
+  *
+  */
 ;$.widget('argilla.panel', {
 
-  options : {
-    controls : {
-      headerLeft: '#panel-header-left',
-      headerRight: '#panel-header-right',
-      bodyLeft: '#panel-body-left',
+  tabs : [
+    {
+      header: '#panel-header-left',
+      body: '#panel-body-left',
+      footer: '#panel-footer-left',
+	  carousel : undefined,
+	}
+  ],
+  hidePanelButton: '#panel-hide-button',
+/*
+  headerRight: '#panel-header-right',
       bodyRight: '#panel-body-right',
-      footerLeft: '#panel-footer-left',
       footerRight: '#panel-footer-right',
-      hidePanelButton: '#panel-hide-button',
-      carouselLeft : undefined,
+      
       carouselRight : undefined,
-      ajaxUpdateSelectors : []
-    },
+*/
+	ajaxUpdateSelectors : [],
     activeClass : 'active',
     collapseClass : 'collapsed',
     hiddenClass : 'hidden',
@@ -29,23 +43,23 @@
   _create: function() {
     var widget = this;
     var options = widget.options;
-    var controls = options.controls;
+//    var controls = options.controls;
 
+	/*
     for(var i in options.controls)
       if( options.controls.hasOwnProperty(i) &&  i != 'carouselLeft' && i != 'carouselRight' && i != 'ajaxUpdateSelectors' )
         controls[i] = $(options.controls[i]);
+	*/	
+	
+	for(i in tabs)
+	{
+	  $(tabs[i].header).bind('click', function(e) {
+        e.preventDefault();
+        widget._clickByHeader($(this), $(tabs[i].body));
+	  });
+	}
 
-    controls.headerLeft.on('click', function(e) {
-      e.preventDefault();
-      widget._clickByHeader($(this), controls.bodyLeft);
-    });
-
-    controls.headerRight.on('click', function(e) {
-      e.preventDefault();
-      widget._clickByHeader($(this), controls.bodyRight);
-    });
-
-    controls.hidePanelButton.on('click', function(e) {
+    $(hidePanelButton).bind('click', function(e) {
       e.preventDefault();
       widget._collapse();
     });
