@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Test panel</title>
+	
+	<link rel="stylesheet" href="qunit/qunit.css">
+	<script src="qunit/qunit.js"></script>
+
+  <script src="../js/jquery/jquery-1.11.0.min.js "></script>
+
+
+  <script src="../js/jquery.plugins/jquery.jcarousel-all.js"></script>
+  <script src="../js/jquery.plugins/jquery.jscrollpane.js "></script>
+  <script src="../js/jquery-ui-1.10.3.custom.min.js"></script>
+
+
+  <script src="../js/jquery.ui.panel.js"></script>
+  <script src="../js/jquery.ui.panelCarousel.js"></script>
+  <script src="../js/jquery.ui.panelElementsContainer.js"></script>
+  <script src="../js/jquery.ui.panelScroll.js"></script>
+
+  <!-- Tests -->
+  <script type="text/javascript" src="panelVars.js"></script>
+	<script type="text/javascript" src="testPanelScroll.js"></script>
+
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+
+  <script>
+    //<![CDATA[
+
+    document.write(emptyPanel);
+
+    $(function(){
+      $('#panel').panel({
+        'controls' : {
+          'headerLeft' : '.panel-fav-link',
+          'headerRight' : '.panel-basket-link',
+          'bodyLeft' : '#favorites-block',
+          'bodyRight' : '#basket-block',
+          'hidePanelButton' : '.products-fixed-panel .close',
+          'carouselLeft' : $('#favorite-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
+          'carouselRight' :  $('#basket-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
+          'ajaxUpdateSelectors' : ['.share-basket-link-block']
+        }
+      });
+    });
+
+    //]]>
+  </script>
+
+
+</body>
+</html>
