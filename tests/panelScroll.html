@@ -38,11 +38,13 @@
     //<![CDATA[
 	document.write(emptyPanel);
 	$('#panel').panel({
-	'tabs' : {
-	  'header' : '.panel-fav-link',
-	  'body' : '#favorites-block',
-	  'carousel' : $('#favorite-elements-container').panelElementsContainer({'type' : 'panelScroll'}),
-	}
+    'tabs' : [
+      {
+        'header': '.panel-fav-link',
+        'body': '#favorites-block',
+        'carousel': $('#favorite-elements-container').panelElementsContainer({'type': 'panelScroll'})
+      }
+    ]
 	});
     //]]>
   </script>

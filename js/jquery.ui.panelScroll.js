@@ -33,9 +33,11 @@
 
   update : function(parameters)
   {
+    //debugger;
+    var blockSelector = this.getSelector();
     var newContent = parameters.newContent;
-    var itemsBlock = this.element.find('.jspPane');
-    var newItemsBlock = newContent.find('#' + this.element.attr('id') + ' ' + this.getSelector());
+    var itemsBlock = this.element.find(blockSelector);
+    var newItemsBlock = newContent.find('#' + this.element.attr('id') + ' ' + blockSelector);
     var emptyBeforeUpdate = this.empty();
     itemsBlock.html(newItemsBlock.html());
     var emptyAfterUpdate = this.empty();

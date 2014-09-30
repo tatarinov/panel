@@ -16,24 +16,24 @@
   *
   */
 ;$.widget('argilla.panel', {
-
-  tabs : [
-    {
-      header: '#panel-header-left',
-      body: '#panel-body-left',
-      footer: '#panel-footer-left',
-	  carousel : undefined,
-	}
-  ],
-  hidePanelButton: '#panel-hide-button',
-/*
+  options : {
+    tabs : [
+      {
+        header: '#panel-header-left',
+        body: '#panel-body-left',
+        footer: '#panel-footer-left',
+        carousel : undefined
+      }
+    ],
+    hidePanelButton: '#panel-hide-button',
+  /*
   headerRight: '#panel-header-right',
       bodyRight: '#panel-body-right',
       footerRight: '#panel-footer-right',
-      
+
       carouselRight : undefined,
-*/
-	ajaxUpdateSelectors : [],
+  */
+    ajaxUpdateSelectors : [],
     activeClass : 'active',
     collapseClass : 'collapsed',
     hiddenClass : 'hidden',
@@ -42,24 +42,18 @@
 
   _create: function() {
     var widget = this;
-    var options = widget.options;
-//    var controls = options.controls;
+    var options = this.options;
+    var tabs = options.tabs;
 
-	/*
-    for(var i in options.controls)
-      if( options.controls.hasOwnProperty(i) &&  i != 'carouselLeft' && i != 'carouselRight' && i != 'ajaxUpdateSelectors' )
-        controls[i] = $(options.controls[i]);
-	*/	
-	
-	for(i in tabs)
-	{
-	  $(tabs[i].header).bind('click', function(e) {
-        e.preventDefault();
-        widget._clickByHeader($(this), $(tabs[i].body));
-	  });
-	}
+    for(i in tabs)
+    {
+      $(tabs[i].header).bind('click', function(e) {
+          e.preventDefault();
+          widget._clickByHeader($(this), $(tabs[i].body));
+      });
+    }
 
-    $(hidePanelButton).bind('click', function(e) {
+    $(options.hidePanelButton).bind('click', function(e) {
       e.preventDefault();
       widget._collapse();
     });
@@ -90,12 +84,14 @@
 
   _deactivateHeader : function() {
     var options = this.options;
-    var controls = options.controls;
+    var tabs = options.tabs;
 
-    controls.headerLeft.removeClass(options.activeClass);
-    controls.headerRight.removeClass(options.activeClass);
-    controls.bodyLeft.hide();
-    controls.bodyRight.hide();
+    for(i in tabs)
+    {
+      var tab = tabs[i];
+      $(tab.header).removeClass(options.activeClass);
+      $(tab.body).hide();
+    }
   },
 
   _showPanel : function() {
@@ -104,33 +100,28 @@
 
   _checkEmptyPanel : function() {
     var options = this.options;
-    var controls = options.controls;
-    var bodyStateLeft = !this._isEmptyBody(controls.bodyLeft);
-    var bodyStateRight = !this._isEmptyBody(controls.bodyRight);
+    var tabs = options.tabs;
+    var oneTabNotEmpty = false;
 
-    if( bodyStateLeft )
+    for(i in tabs)
     {
-      controls.headerLeft.removeClass(options.hiddenClass);
-      controls.footerLeft.show();
-    }
-    else
-    {
-      controls.headerLeft.addClass(options.hiddenClass);
-      controls.footerLeft.hide();
-    }
+      var tab = tabs[i];
+      var emptyBody = tab.carousel.empty();
 
-    if( bodyStateRight )
-    {
-      controls.headerRight.removeClass(options.hiddenClass);
-      controls.footerRight.show();
-    }
-    else
-    {
-      controls.headerRight.addClass(options.hiddenClass);
-      controls.footerRight.hide();
+      if( emptyBody )
+      {
+        $(tab.header).addClass(options.hiddenClass);
+        $(tab.footer).hide();
+      }
+      else
+      {
+        oneTabNotEmpty = true;
+        $(tab.header).removeClass(options.hiddenClass);
+        $(tab.footer).show();
+      }
     }
 
-    if( bodyStateLeft || bodyStateRight )
+    if( oneTabNotEmpty )
     {
       this.element.removeClass(options.hiddenClass);
     }
@@ -139,10 +130,6 @@
       this._collapse();
       this.element.addClass(options.hiddenClass);
     }
-  },
-
-  _isEmptyBody : function(body) {
-     return body.find(this.options.panelItemElement).length > 0 ? false : true;
   },
 
 /*  _updateCarousel : function(carousel, body ,content) {
@@ -179,25 +166,23 @@
   update : function(response)
   {
     var options = this.options;
-    var controls = options.controls;
+    var tabs = options.tabs;
     var content = $('<div>' + response + '</div>');
-    var panel = $(content.find('#' + this.element.attr('id')));
+    var newPanel = $(content.find('#' + this.element.attr('id')));
 
-    controls.headerLeft.html(panel.find(controls.headerLeft.selector).html());
-    controls.headerRight.html(panel.find(controls.headerRight.selector).html());
-
-    controls.footerLeft.html(panel.find(controls.footerLeft.selector).html());
-    controls.footerRight.html(panel.find(controls.footerRight.selector).html());
-
-    this._updateCarousel(controls.carouselLeft, panel);
-    this._updateCarousel(controls.carouselRight, panel);
-
-    for(var i in controls.ajaxUpdateSelectors)
+    for(i in tabs)
     {
-      if( controls.ajaxUpdateSelectors.hasOwnProperty(i) )
+      $(tabs[i].header).html(newPanel.find(tabs[i].header).html());
+      $(tabs[i].footer).html(newPanel.find(tabs[i].footer).html());
+      this._updateCarousel(tabs[i].carousel, newPanel);
+    }
+
+    for(var i in options.ajaxUpdateSelectors)
+    {
+      if( options.ajaxUpdateSelectors.hasOwnProperty(i) )
       {
-        var oldElement = $(controls.ajaxUpdateSelectors[i]);
-        var newElement = panel.find(controls.ajaxUpdateSelectors[i]);
+        var oldElement = $(options.ajaxUpdateSelectors[i]);
+        var newElement = newPanel.find(options.ajaxUpdateSelectors[i]);
 
         if( oldElement.length > 0 &&  newElement.length > 0 )
         {
